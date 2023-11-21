@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      #url后缀 &zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:3306/studentSystem?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: 123456
+  cache:
+    redis:
+      time-to-live: 1800000   #设置缓存过期时间
+
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    #日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #下面这三行配置主键生成策略
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
+#自定义配置属性

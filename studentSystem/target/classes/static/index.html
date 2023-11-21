@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高考志愿填报</title>
+    <style>
+        /* 样式保持不变，可以根据需要进行调整 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #college-list {
+            border-collapse: collapse;
+            width: 50%;
+            margin-bottom: 20px;
+        }
+
+        #college-list th, #college-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #college-list th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>高考志愿填报</h1>
+
+<table id="college-list">
+    <thead>
+    <tr>
+        <th>院校名称</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 使用Thymeleaf循环渲染院校列表 -->
+    <tr th:each="college : ${collegeList}">
+        <td th:text="${college.name}"></td>
+        <td>
+            <button class="btn" th:onclick="'editCollege(\'' + ${college.id} + '\')'">编辑</button>
+            <button class="btn" th:onclick="'deleteCollege(\'' + ${college.id} + '\')'">删除</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<button class="btn" onclick="addCollege()">添加院校</button>
+
+<script>
+    // 添加院校
+    function addCollege() {
+        fetch('/college/addCollege', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: '新院校', // 新院校的名称，您可以根据实际需求修改
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 处理从后端返回的数据
+                document.getElementById('operation-result').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // 编辑院校
+    function editCollege(collegeId) {
+        fetch('/editCollege', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: collegeId,
+                newName: '修改后的名称', // 修改后的名称，您可以根据实际需求修改
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 处理从后端返回的数据
+                document.getElementById('operation-result').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // 删除院校
+    function deleteCollege(collegeId) {
+        fetch('/deleteCollege/' + collegeId, {
+            method: 'DELETE',
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 处理从后端返回的数据
+                document.getElementById('operation-result').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #user-list {
+            width: 50%;
+            margin-bottom: 20px;
+        }
+
+        #user-list th, #user-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #user-list th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        #user-form {
+            width: 50%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>用户管理</h1>
+
+<table id="user-list">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>Email</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 使用Thymeleaf循环渲染用户列表 -->
+    <tr th:each="user : ${userList}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td>
+            <button class="btn" th:onclick="'editUser(\'' + ${user.id} + '\')'">编辑</button>
+            <button class="btn" th:onclick="'deleteUser(\'' + ${user.id} + '\')'">删除</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div id="user-form">
+    <h2>添加/编辑用户</h2>
+    <form th:action="@{/saveUser}" method="post" onsubmit="return saveUser()">
+        <!-- 如果是编辑用户，需要传递用户ID -->
+        <input type="hidden" id="userId" name="id">
+
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">密码:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">保存</button>
+    </form>
+</div>
+
+<script>
+    // 保存用户
+    function saveUser() {
+        var userId = document.getElementById('userId').value;
+        var username = document.getElementById('username').value;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        // 使用Ajax发送请求保存用户信息到后端
+        alert("发送保存用户请求到后端");
+
+        // 清空表单
+        document.getElementById('userId').value = '';
+        document.getElementById('username').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+
+        return false; // 防止表单提交
+    }
+
+    // 编辑用户
+    function editUser(userId) {
+        // 使用Ajax发送请求获取用户信息，填充到表单中
+        alert("发送获取用户信息请求到后端，用户ID：" + userId);
+    }
+
+    // 删除用户
+    function deleteUser(userId) {
+        // 使用Ajax发送请求删除用户
+        alert("发送删除用户请求到后端，用户ID：" + userId);
+    }
+</script>
+
+</body>
+</html>
